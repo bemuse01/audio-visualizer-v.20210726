@@ -2,19 +2,18 @@ import PUBLIC_METHOD from '../../../method/method.js'
 import Spline from '../../../lib/cubic-spline.js'
 
 export default {
-    setPosition({geometry, idx, degree}){
+    setPosition({geometry, idx, degree, distance, gap}){
         const array = geometry.attributes.position.array
 
-
         for(let i = 0; i < 2; i++){
-            const dir = i === 0 ? 1 : -1
+            const dir = i === 0 ? -1 : 1
 
             for(let j = 0; j < 2; j++){
                 const index = (i * 2 + j) * 3
                 const deg = idx * degree + j * degree
 
-                const x = Math.cos(deg * RADIAN) * (200 + 50 * dir) 
-                const y = Math.sin(deg * RADIAN) * (200 + 50 * dir) 
+                const x = Math.cos(deg * RADIAN) * (distance + gap * dir) 
+                const y = Math.sin(deg * RADIAN) * (distance + gap * dir) 
 
                 array[index] = x
                 array[index + 1] = y
@@ -44,7 +43,7 @@ export default {
 
         const avg = temp.reduce((x, y) => x + y) / len
         temp = temp.map(e => Math.max(1, e - avg))
-        // temp = temp.map(e => PUBLIC_METHOD.normalize(Math.max(1, e - avg), 1, 100, 0, 255))
+        // temp = temp.map(e => PUBLIC_METHOD.normalize(Math.max(1, e - avg), 1, 255, 0, 255))
 
         return temp
     }

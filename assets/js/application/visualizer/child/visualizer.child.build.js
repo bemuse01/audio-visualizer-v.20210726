@@ -25,7 +25,8 @@ export default class{
             color: 0xffffff,
             smooth: 0.14,
             smoothingTimeConstant: 0.85,
-            distance: 100
+            distance: 250,
+            gap: 5
         }
 
         this.count = ~~(360 / this.param.degree)
@@ -58,7 +59,7 @@ export default class{
     createGeometry(idx){
         const geometry = new THREE.PlaneGeometry()
 
-        METHOD.setPosition({geometry, idx, degree: this.param.degree})
+        METHOD.setPosition({geometry, idx, ...this.param})
 
         return geometry
     }
@@ -75,34 +76,33 @@ export default class{
         // if(!this.play) return
         if(!context) return
 
-        // const startOffset = Math.floor(1 / this.param.fps * context.sampleRate)
-        // const offset = audioData.slice(startOffset)
-        // const sample = METHOD.createStepAudioBuffer({offset, display: this.count, step: this.param.step})
-        // const buffer = METHOD.createAudioBuffer({sample, index: this.index, smooth: this.param.smooth})
+        const startOffset = Math.floor(1 / this.param.fps * context.sampleRate)
+        const offset = audioData.slice(startOffset)
+        const sample = METHOD.createStepAudioBuffer({offset, display: this.count, step: this.param.step})
+        const buffer = METHOD.createAudioBuffer({sample, index: this.index, smooth: this.param.smooth})
 
-        // console.log(buffer)
+        const {distance, gap, degree} = this.param
 
-        // this.local.children.forEach((mesh, idx) => {
-        //     const position = mesh.geometry.attributes.position
-        //     const array = position.array
+        this.local.children.forEach((mesh, idx) => {
+            const position = mesh.geometry.attributes.position
+            const array = position.array
 
-        //     for(let i = 0; i < 2; i++){
-        //         const deg = this.param.degree * idx
-        //         const dir = i === 0 ? -1 : 1
+            for(let i = 0; i < 2; i++){
+                const dir = i === 0 ? -1 : 1
 
-        //         for(let j = 0; j < 2; j++){
-        //             const index = (i * 2 + j) * 3
-        //             const degree = deg + this.param.degree * j
+                for(let j = 0; j < 2; j++){
+                    const index = (i * 2 + j) * 3
+                    const deg = degree * idx + degree * j
 
-        //             const x = Math.cos(degree * RADIAN) * buffer[idx] * dir
-        //             const y = Math.sin(degree * RADIAN) * buffer[idx] * dir
+                    const x = Math.cos(deg * RADIAN) * (distance + (gap + buffer[idx]) * dir)
+                    const y = Math.sin(deg * RADIAN) * (distance + (gap + buffer[idx]) * dir)
 
-        //             array[index] = x
-        //             array[index + 1] = y
-        //         }
-        //     }
+                    array[index] = x
+                    array[index + 1] = y
+                }
+            }
 
-        //     position.needsUpdate = true
-        // })
+            position.needsUpdate = true
+        })
     }
 }
