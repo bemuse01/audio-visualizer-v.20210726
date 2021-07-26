@@ -24,7 +24,6 @@ export default class{
             size: 16,
             color: 0xffffff,
             smooth: 0.14,
-            smoothingTimeConstant: 0.85,
             distance: 250,
             gap: 5
         }
