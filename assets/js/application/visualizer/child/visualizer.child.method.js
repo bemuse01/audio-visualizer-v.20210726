@@ -5,6 +5,7 @@ export default {
     setPosition({geometry, idx, degree}){
         const array = geometry.attributes.position.array
 
+
         for(let i = 0; i < 2; i++){
             const dir = i === 0 ? 1 : -1
 
@@ -12,8 +13,8 @@ export default {
                 const index = (i * 2 + j) * 3
                 const deg = idx * degree + j * degree
 
-                const x = Math.cos(deg * RADIAN) * 100 * dir 
-                const y = Math.sin(deg * RADIAN) * 100 * dir 
+                const x = Math.cos(deg * RADIAN) * (200 + 50 * dir) 
+                const y = Math.sin(deg * RADIAN) * (200 + 50 * dir) 
 
                 array[index] = x
                 array[index + 1] = y
