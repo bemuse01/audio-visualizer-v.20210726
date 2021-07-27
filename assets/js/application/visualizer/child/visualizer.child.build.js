@@ -19,13 +19,10 @@ export default class{
             degree: 4,
             fps: 60,
             step: 12,
-            width: 500,
-            height: 5,
-            size: 16,
             color: 0xffffff,
             smooth: 0.14,
             distance: 250,
-            gap: 5
+            gap: 4
         }
 
         this.count = ~~(360 / this.param.degree)

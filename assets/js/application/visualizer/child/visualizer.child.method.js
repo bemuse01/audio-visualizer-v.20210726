@@ -35,6 +35,8 @@ export default {
 
         const xs = index
         const ys = sample
+        // ys[0] = 0
+        // ys[Math.floor((len - 1) * smooth)] = 0
         const spline = new Spline(xs, ys)
         
         for(let i = 0; i < len; i++){
@@ -42,7 +44,7 @@ export default {
         }
 
         const avg = temp.reduce((x, y) => x + y) / len
-        temp = temp.map(e => Math.max(1, e - avg))
+        temp = temp.map(e => Math.max(0, e - avg))
         // temp = temp.map(e => PUBLIC_METHOD.normalize(Math.max(1, e - avg), 1, 255, 0, 255))
 
         return temp
